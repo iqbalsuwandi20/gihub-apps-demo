@@ -1,5 +1,3 @@
-// link : https://api.github.com/search/users?q=followers%3A%3E%3D1000&ref=searchresults&s=followers&type=Users
-
 import 'dart:convert';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));

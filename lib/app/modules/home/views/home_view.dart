@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../data/models/user.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -109,7 +112,10 @@ class HomeView extends GetView<HomeController> {
 
                           return GestureDetector(
                             onTap: () {
-                              // Handle tap
+                              Get.toNamed(
+                                Routes.DETAIL_USERS_SCREEN,
+                                arguments: user.login,
+                              );
                             },
                             child: Card(
                               margin: EdgeInsets.symmetric(
@@ -136,7 +142,7 @@ class HomeView extends GetView<HomeController> {
                                   user.login,
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: screenWidth * 0.05,
+                                    fontSize: screenWidth * 0.04,
                                     color: Colors.black87,
                                   ),
                                 ),
