@@ -8,7 +8,8 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "Application",
-      initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.HOME,
+      debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
     ),
   );
