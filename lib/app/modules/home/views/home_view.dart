@@ -92,7 +92,7 @@ class HomeView extends GetView<HomeController> {
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Center(
                           child: Text(
-                            "Mohon maaf, tidak ada data yang tersedia!",
+                            "Sorry, no data available!",
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               color: Colors.black,
@@ -165,16 +165,96 @@ class HomeView extends GetView<HomeController> {
                       );
                     },
                   ),
-                  Center(
-                    child: Text(
-                      "Tab Favorite",
-                      style: GoogleFonts.poppins(
-                        fontSize: screenWidth * 0.05,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ),
+                  GetBuilder<HomeController>(
+                    builder: (c) {
+                      return FutureBuilder<List<Map<String, dynamic>>>(
+                        future: c.fetchFavorites(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.blueAccent[700],
+                              ),
+                            );
+                          }
+
+                          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(
+                              child: Text(
+                                "Sorry, no data available!",
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontSize: screenWidth * 0.04,
+                                ),
+                              ),
+                            );
+                          }
+
+                          final favorites = snapshot.data ?? [];
+
+                          return ListView.builder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.05,
+                            ),
+                            itemCount: favorites.length,
+                            itemBuilder: (context, index) {
+                              final user = favorites[index];
+
+                              return Card(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: screenHeight * 0.02,
+                                ),
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                color: Colors.white,
+                                child: ListTile(
+                                  contentPadding:
+                                      EdgeInsets.all(screenWidth * 0.05),
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.network(
+                                      user['avatarUrl'],
+                                      height: screenWidth * 0.15,
+                                      width: screenWidth * 0.15,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    user['name'],
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: screenWidth * 0.04,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    user['username'],
+                                    style: GoogleFonts.poppins(
+                                      fontSize: screenWidth * 0.04,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () {
+                                      c.deleteFavorite(user['username']);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_outline_outlined,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  )
                 ],
               ),
             ),

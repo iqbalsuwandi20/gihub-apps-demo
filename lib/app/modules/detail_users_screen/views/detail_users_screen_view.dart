@@ -40,8 +40,14 @@ class DetailUsersScreenView extends GetView<DetailUsersScreenController> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // proses masukan ke favorite
+            onPressed: () async {
+              final user = await controller.fetchDetailUser(username);
+
+              if (user != null) {
+                await controller.addFavorite(user);
+
+                Get.snackbar("Favorite", '${user.name} added to favorite');
+              }
             },
             icon: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),

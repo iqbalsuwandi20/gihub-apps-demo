@@ -3,10 +3,31 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../data/databases/favorite.dart';
 import '../../../data/models/user.dart';
 
 class HomeController extends GetxController {
   var users = <User>[].obs;
+
+  Future<void> deleteFavorite(String username) async {
+    try {
+      await DatabaseManager.instance.deleteFavorite(username);
+      update();
+      Get.snackbar('Success', '$username removed from favorites');
+    } catch (e) {
+      Get.snackbar('Error', 'Error deleting favorite: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchFavorites() async {
+    try {
+      final favorites = await DatabaseManager.instance.getFavorites();
+      return favorites;
+    } catch (e) {
+      Get.snackbar("Error", "Error fetching favorites: $e");
+      return [];
+    }
+  }
 
   Future<List<User>> getAllUsers() async {
     try {
