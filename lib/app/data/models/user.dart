@@ -46,7 +46,7 @@ class User {
     required this.type,
     required this.userViewType,
     required this.siteAdmin,
-    required this.score, // Pastikan nilai score adalah double
+    required this.score,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
